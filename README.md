@@ -120,14 +120,11 @@ Para determinar el umbral de decisión, se utilizó el **Estadístico KS**, esta
 ### Impacto de Negocio (Matriz de Confusión)
 Al aplicar el **umbral óptimo (0.488)**, los resultados en el set de prueba son:
 
-* **🛡️ Defaults Prevenidos:** **3,358** casos de alto riesgo bloqueados.
-* **✅ Créditos Sanos Aprobados:** **37,896** clientes con buen perfil liquidados.
+* **🛡️ Defaults Prevenidos** **3,358** (Verdaderos Positivos): Casos de alto riesgo bloqueados con éxito.
+* **✅ Créditos Aprobados** **37,896** (Verdaderos Negativos): Clientes sanos que generan ingresos por intereses.
+* **⚠️ Costo de Oportunidad**	**18,642** (Falsos Positivos): Clientes sanos rechazados preventivamente.
+* **❌ Riesgo Residual**	**1,607** (Falsos Negativos): Morosos no detectados (Pérdida directa).
 
-#### 📈 Análisis de Capacidad de Detección
-* **🎯 Tasa de Captura (Recall):** **67.6%** 
-* Por cada **10 potenciales morosos**, el modelo identifica y frena a **7**.
-* Existe un **Riesgo Residual de 1,607 casos (Falsos Negativos)**, que representan el 32.4% de la morosidad total no detectada. 
-Este nivel de filtración es aceptable bajo los parámetros actuales de apetito de riesgo, permitiendo un equilibrio entre crecimiento de cartera y control de pérdidas.
 
 ### 📉 KPIs de Desempeño Final
 | Métrica | Valor |
