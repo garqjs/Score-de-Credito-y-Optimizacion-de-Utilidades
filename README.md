@@ -39,19 +39,33 @@ Más allá de utilizar las variables crudas, implementamos lógica de negocio cr
 
 ### 1. Desempeño Estadístico
 * **Gini**: `0.5007`
-* **KS Statistic**: `0.3731` @ Umbral `49.9%`
+* **KS Statistic**: `0.3731`
+* **Umbral**: `49.9%`
 
 <img width="848" height="541" alt="image" src="https://github.com/user-attachments/assets/c45b3ff8-87b6-4fd6-898f-3588a10840c2" />
 
-
-### 2. Optimización Financiera (Profit & Loss)
-* **Beneficio Neto Maximizado**: `$3,107,153,318.17`
-* **Capital Salvado (Fraude Evitado)**: `$1,051,806,027.60`
-
 <img width="881" height="541" alt="image" src="https://github.com/user-attachments/assets/cf75c33c-c8e1-4fed-a02d-211652abdd35" />
 
+### 2. Optimización Financiera (Profit & Loss)
 
-### 3. Impacto Operativo
+💰 RESULTADOS FINANCIEROS DETALLADOS (P&L)
+
+### Proyección sobre la cartera de validación:
+  
+  [+] Intereses Ganados (Sanos):       + $3,731,499,888.53
+  
+  [-] Capital Perdido (Default LGD):   - $580,213,567.80
+  
+  
+  ### 🚀 BENEFICIO NETO MAXIMIZADO:        = $3,151,286,320.73
+  
+  
+   🛡️ Capital Salvado (Fraude Evitado)*:   $1,083,715,240.50
+  
+   📉 Dinero dejado en la mesa (FP)*:      $1,398,544,589.92
+
+
+### Impacto Operativo
 
 🎯 INTERPRETACIÓN DE LA MATRIZ DE CONFUSIÓN
 
