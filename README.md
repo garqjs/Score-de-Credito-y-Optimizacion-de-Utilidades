@@ -13,78 +13,97 @@ Este proyecto rompe con dicho enfoque al implementar una arquitectura de **"Earl
 
 ---
 
-## 📊 Arquitectura del Proyecto
-El modelo procesa de forma integrada 4 datasets clave para capturar la realidad financiera del cliente:
-1. `application_train.csv`: Datos demográficos y financieros base.
-2. `bureau.csv`: Historial crediticio externo y niveles de deuda.
-3. `installments_payments.csv`: Comportamiento de pago detallado (atrasos y cumplimiento).
-4. `previous_application.csv`: Experiencia previa con la institución.
+## 📊 Arquitectura del Proyecto y Data Pipeline
+El modelo integra 4 fuentes de datos transaccionales para capturar una visión 360° del cliente:
+
+* **`application_train.csv`**: Datos demográficos y financieros base.
+* **`bureau.csv`**: Historial crediticio externo y niveles de deuda consolidada.
+* **`installments_payments.csv`**: Comportamiento detallado de pagos (cronología de atrasos).
+* **`previous_application.csv`**: Experiencia previa y tasa de aprobación interna.
 
 ---
 
-## 🛠 Ingeniería de Características (Diferenciador Técnico)
-Más allá de utilizar las variables crudas, implementamos lógica de negocio crítica:
+## 🛠️ Feature Store: Ingeniería de Variables Críticas
+Más allá de los datos crudos, el diferenciador técnico radica en la creación de variables con lógica de negocio:
 
-### 📖 Glosario de Variables Predictoras (Feature Store)
-| Variable | Traducción / Descripción | Impacto en el Modelo |
+| Variable | Traducción / Descripción | Impacto Estratégico |
 | :--- | :--- | :--- |
-| `DELTA_ATRASO` | **Delta de Atraso** | Diferencia entre el atraso actual y el histórico. Indica deterioro. |
-| `RATIO_APALANCAMIENTO` | **Ratio de Apalancamiento** | Deuda total sobre ingresos. Mide la saturación financiera. |
-| `RATIO_CARGA_CUOTA` | **Ratio de Carga de Cuota** | Porcentaje del ingreso mensual destinado a pagar la cuota. |
-| `CUMPLIMIENTO_RECIENTE` | **Cumplimiento Reciente (3M)** | Porcentaje de la cuota realmente pagada en los últimos 3 meses. |
+| **DELTA_ATRASO** | Delta de Atraso | Mide la aceleración del deterioro (Atraso actual vs. Histórico). |
+| **RATIO_APALANCAMIENTO** | Ratio de Apalancamiento | Deuda total / Ingresos. Detecta saturación financiera. |
+| **RATIO_CARGA_CUOTA** | Ratio de Carga de Cuota | % del ingreso mensual destinado al servicio de la deuda. |
+| **CUMPLIMIENTO_RECENT** | Cumplimiento (3M) | % de cuota realmente pagada en el último trimestre. |
 
----
 
 ## 📈 Resultados Finales
 
-### 1. Desempeño Estadístico
+### Desempeño Estadístico
 * **Gini**: `0.5007`
 * **KS Statistic**: `0.3731`
-* **Umbral**: `49.9%`
+* **Umbral de Corte**: `49.9%`
 
 <img width="848" height="541" alt="image" src="https://github.com/user-attachments/assets/c45b3ff8-87b6-4fd6-898f-3588a10840c2" />
 
-<img width="881" height="541" alt="image" src="https://github.com/user-attachments/assets/cf75c33c-c8e1-4fed-a02d-211652abdd35" />
 
-### 2. Optimización Financiera (Profit & Loss)
+### Optimización Financiera (P&L)
+El modelo no solo busca precisión, busca **rentabilidad**. Proyección sobre la cartera de validación:
 
-💰 RESULTADOS FINANCIEROS DETALLADOS (P&L)
+| Concepto | Monto (MXN/USD) |
+| :--- | :--- |
+| **[+] Intereses Ganados (Sanos)** | + $3,731,499,888.53 |
+| **[-] Capital Perdido (LGD)** | - $580,213,567.80 |
+| 🚀 **BENEFICIO NETO MAXIMIZADO** | **$3,151,286,320.73** |
 
-### Proyección sobre la cartera de validación:
-  
-  [+] Intereses Ganados (Sanos):       + $3,731,499,888.53
-  
-  [-] Capital Perdido (Default LGD):   - $580,213,567.80
-  
-  
-  ### 🚀 BENEFICIO NETO MAXIMIZADO:        = $3,151,286,320.73
-  
-  
-   🛡️ Capital Salvado (Fraude Evitado)*:   $1,083,715,240.50
-  
-   📉 Dinero dejado en la mesa (FP)*:      $1,398,544,589.92
+> **🛡️ Capital Salvado (Fraude/Default Evitado):** $1,083,715,240.50  
+> **📉 Costo de Oportunidad (Falsos Positivos):** $1,398,544,589.92
+
+   <img width="881" height="541" alt="image" src="https://github.com/user-attachments/assets/cf75c33c-c8e1-4fed-a02d-211652abdd35" />
 
 
-### Impacto Operativo
+## 🎯 Impacto Operativo (Matriz de Confusión)
+Bajo la política de riesgo de **Umbral > 50%**:
 
-🎯 INTERPRETACIÓN DE LA MATRIZ DE CONFUSIÓN
+* ✅ **Sanos Aprobados (TN):** 39,412 (Generadores de flujo).
+* ❌ **Default Evitado (TP):** 3,346 (Capital protegido).
+* ⚠️ **Falsos Positivos (FP):** 17,126 (Clientes rechazados por precaución).
+* 🩸 **Falsos Negativos (FN):** 1,619 (Fugas de riesgo - LGD).
 
-  Bajo la política de rechazar a clientes con Riesgo > 50.0%:
-  
-  ✅ Sanos Aprobados (TN): 39,412 -> Clientes que generan ingresos por intereses.
-  
-  ❌ Fraude Evitado (TP): 3,346 -> Morosos bloqueados. Capital protegido.
-  
-  ⚠️ Falsos Positivos (FP): 17,126 -> Buenos clientes rechazados (Costo de oportunidad).
-  
-  🩸 Falsos Negativos (FN): 1,619 -> Morosos que se filtraron (Pérdida real de LGD).
+  <img width="720" height="541" alt="image" src="https://github.com/user-attachments/assets/769e561d-e0df-4b98-9303-83eb0fd42929" />
+
 
 ---
 
-## 🧠 Explicabilidad (SHAP)
-Utilizamos **SHAP** para asegurar la transparencia, evitando el fenómeno de "caja negra":
+## 🧠 Explicabilidad del Modelo (SHAP Values)
 
-<img width="760" height="435" alt="image" src="https://github.com/user-attachments/assets/533576c4-17ad-49a0-b14e-52a0837db4e1" />
+Para garantizar que el modelo sea **auditable y libre de sesgos**, implementamos **SHAP (Shapley Additive Explanations)**. Esta técnica de Game Theory permite descomponer la predicción del modelo y entender exactamente cómo cada variable suma o resta al riesgo final del cliente.
+
+### 🔍 ¿Cómo leer la gráfica de Impacto SHAP?
+
+| Observación en Gráfica | Interpretación Técnica | Lógica de Riesgo |
+| :--- | :--- | :--- |
+| **Concentración a la Izquierda** | Valores que **reducen** la probabilidad de default (Sanos). | Estabilidad financiera y alto scoring externo. |
+| **Dispersión a la Derecha** | Valores que **aumentan** el riesgo de impago (Morosos). | Deterioro reciente y sobreendeudamiento. |
+| **Color (Rojo/Azul)** | Indica si el valor de la variable es alto (rojo) o bajo (azul). | Relación directa/inversa con el riesgo. |
+
+### 🔍 Glosario de Impacto SHAP
+
+| Variable | Interpretación del Valor SHAP | Lógica de Riesgo Bancario |
+| :--- | :--- | :--- |
+| **EXT_SOURCE 1, 2, 3** | Impacto dominante y negativo. | El puntaje externo sigue siendo el filtro principal de solvencia. |
+| **Años de Empleado** | Valores bajos (azul) desplazan el riesgo a la derecha. | La falta de antigüedad laboral es un driver crítico de inestabilidad. |
+| **Tasa Rechazo Interno** | Puntos rojos a la derecha aumentan el riesgo. | Clientes con historial de rechazos previos tienen mayor propensión al default. |
+| **Promedio Días Atraso Hist.** | Concentración roja en la zona de riesgo. | El comportamiento de pago pasado es el mejor predictor del futuro. |
+| **Edad (Años)** | Dispersión variada. | Permite segmentar el riesgo por etapas de vida y estabilidad patrimonial. |
+| **Monto Crédito** | Puntos rojos desplazados del centro. | Valida la necesidad de monitorear el sobreendeudamiento. |
+| **Flag Own Car / Gender** | Impactos marginales pero consistentes. | Actúan como variables de control para el perfil sociodemográfico. |
+
+<img width="769" height="555" alt="image" src="https://github.com/user-attachments/assets/121bb815-709c-4d81-b5ef-72175b94f3c4" />
+
+### 🏆 Hallazgos Clave de Explicabilidad
+
+1. **El Peso del Historial Interno:** La aparición de `tasa_rechazo_interno` y `promedio_dias_atraso_hist` entre las variables de mayor impacto demuestra que el modelo ahora prioriza la **lealtad y el comportamiento del cliente** con nuestra propia institución, permitiendo una cobranza más preventiva.
+2. **Estabilidad vs. Oportunidad:** El factor `años_empleado` muestra una frontera clara; el modelo penaliza severamente la volatilidad laboral, lo que sugiere que nuestra política de "Early Warning" debe enfocarse en clientes con menos de 2 años en su puesto actual.
+3. **Refinamiento del P&L:** Al entender cómo la `edad` y la `tasa_rechazo` afectan el Score, podemos ajustar las tasas de interés de forma personalizada (Risk-Based Pricing), maximizando el margen en segmentos identificados como "estables" por el análisis SHAP.
 
 
-**Hallazgo:** La combinación de variables de comportamiento (`DELTA_ATRASO`) junto con restricciones de **monotonicidad** garantiza que el modelo actúe conforme a la lógica financiera bancaria, haciendo que las decisiones sean auditables y explicables.
+> **Nota de Auditoría:** Este nivel de transparencia permite que cada rechazo de crédito tenga una justificación matemática clara (Reason Codes), cumpliendo con las normativas de transparencia financiera y permitiendo auditorías de modelos de "Caja Negra" (XGBoost).
+> 
