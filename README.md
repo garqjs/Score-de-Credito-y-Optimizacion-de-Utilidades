@@ -76,14 +76,6 @@ Bajo la política de riesgo de **Umbral > 50%**:
 
 Para garantizar que el modelo sea **auditable y libre de sesgos**, implementamos **SHAP (Shapley Additive Explanations)**. Esta técnica de Game Theory permite descomponer la predicción del modelo y entender exactamente cómo cada variable suma o resta al riesgo final del cliente.
 
-### 🔍 ¿Cómo leer la gráfica de Impacto SHAP?
-
-| Observación en Gráfica | Interpretación Técnica | Lógica de Riesgo |
-| :--- | :--- | :--- |
-| **Concentración a la Izquierda** | Valores que **reducen** la probabilidad de default (Sanos). | Estabilidad financiera y alto scoring externo. |
-| **Dispersión a la Derecha** | Valores que **aumentan** el riesgo de impago (Morosos). | Deterioro reciente y sobreendeudamiento. |
-| **Color (Rojo/Azul)** | Indica si el valor de la variable es alto (rojo) o bajo (azul). | Relación directa/inversa con el riesgo. |
-
 ### 🔍 Glosario de Impacto SHAP
 
 | Variable | Interpretación del Valor SHAP | Lógica de Riesgo Bancario |
@@ -124,4 +116,20 @@ Este proyecto demuestra que la **Ciencia de Datos** aplicada a la banca no debe 
 La implementación de este modelo asegura una cartera **sana, auditable ante reguladores y, sobre todo, altamente competitiva** en un entorno financiero dinámico.
 
 ---
+
+## 🛠️ Retos Técnicos y Soluciones
+
+Durante el desarrollo de este pipeline, se enfrentaron desafíos críticos que requirieron soluciones de arquitectura avanzada:
+
+1. **Gestión de la Complejidad de Datos (4 Fuentes):** - **Reto:** Unificar datos demográficos, historial de Bureau y cronología de pagos sin generar "Data Leakage" (fuga de datos).
+   - **Solución:** Se diseñó un proceso de agregación temporal en **DuckDB** que asegura que el modelo solo aprenda de eventos pasados respecto a la fecha de solicitud del crédito.
+
+2. **Decisiones Contra-intuitivas:**
+   - **Reto:** Evitar que el modelo asignara menor riesgo a clientes con mayor deuda (anomalías estadísticas).
+   - **Solución:** Implementación de **Restricciones Monotónicas** en XGBoost. Esto garantiza que el Score respete la lógica económica (a mayor deuda, mayor riesgo), haciendo al modelo auditable ante reguladores financieros.
+
+3. **Interpretación de "Caja Negra":**
+   - **Reto:** Explicar por qué se rechazó un crédito específico.
+   - **Solución:** Integración de **SHAP Values** a nivel individual. Cada predicción cuenta con "Reason Codes" claros que identifican qué variables (como el Delta de Atraso o el Ratio de Apalancamiento) influyeron en el resultado.
+
 **Proyecto finalizado: Optimización de Riesgo y Maximizacion de Utilidades mediante IA Explicable.**
