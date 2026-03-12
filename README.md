@@ -132,4 +132,3 @@ Durante el desarrollo de este pipeline, se enfrentaron desafíos críticos que r
    - **Reto:** Explicar por qué se rechazó un crédito específico.
    - **Solución:** Integración de **SHAP Values** a nivel individual. Cada predicción cuenta con "Reason Codes" claros que identifican qué variables (como el Delta de Atraso o el Ratio de Apalancamiento) influyeron en el resultado.
 
-**Proyecto finalizado: Optimización de Riesgo y Maximizacion de Utilidades mediante IA Explicable.**
